@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: rgb(149, 255, 0);
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 5px rgba(131, 221, 13, 0.1);
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo a {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #555;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #007bff;
+        }
+
+        .auth-buttons a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-left: 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .login-btn {
+            border: 1px solid #007bff;
+            color: #007bff;
+        }
+
+        .login-btn:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .signup-btn {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .signup-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .featured-categories {
+            padding: 80px 0;
+            background-color: #fff;
+        }
+
+        .featured-categories h2 {
+            font-size: 2em;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .category-card {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .category-card img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .category-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .category-card p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .category-card a {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .category-card a:hover {
+            background-color: #00b386;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        footer .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        footer nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        footer nav ul li {
+            margin-left: 15px;
+        }
+
+        footer nav ul li a {
+            text-decoration: none;
+            color: #ddd;
+            transition: color 0.3s ease;
+        }
+
+        footer nav ul li a:hover {
+            color: #fff;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+
+        #searchInput {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-left: 20px;
+            width: 200px; /* Adjust width as needed */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index2.html"><h1>Notes World</h1></a>
+            </div>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search categories..." onkeyup="searchCategories()">
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index2.html">Home</a></li>
+                    <li><a href="#" id="browseNotesBtn">Browse Notes</a></li> <!-- Added Browse Notes Button -->
+                    <li><a href="upload.html">Upload Notes</a></li>
+                    <li><a href="favorites.html">Favourites</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="profile.html" class="login-btn">Profile</a>
+            </div>
+        </div>
+    </header>
+    <section class="featured-categories">
+        <div class="container">
+            <h2>Welcome To Commerce Stream</h2>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <img src="political science.jpg" alt="Political Science" style="width: 284px; height: 177px;">
+                    <h3>Political Science</h3>
+                    <p>All Political Science Notes Pdf and Chapters</p>
+                    <a href="#">Download</a>
+                    <a href="#" class="like-button" style="background-color: white;" onclick="addToFavorites('Political Science', 'Important Notes for Political Science all Chapters', 'political_science.jpg')">❤️</a>
+                </div>
+                <div class="category-card">
+                    <img src="acc.jpg" alt="Accountancy" style="width: 284px; height: 177px;">
+                    <h3>Accountancy</h3>
+                    <p>All Accountancy Notes Pdf and Chapters...</p>
+                    <a href="#">Download</a>
+                    <a href="#" class="like-button" style="background-color: white;" onclick="addToFavorites('Accountancy', 'Important Notes for Accountancy all Chapters', 'acc.jpg')">❤️</a>
+                </div>
+                <div class="category-card">
+                    <img src="stat.jpg" alt="Statistics" style="width: 284px; height: 177px;">
+                    <h3>Statistics</h3>
+                    <p>All Statistics Notes Pdf and Chapters...</p>
+                    <a href="#">Download</a>
+                    <a href="#" class="like-button" style="background-color: white;" onclick="addToFavorites('Statistics', 'Important Notes for Statistics all Chapters', 'stat.jpg')">❤️</a>
+                </div>
+                <div class="category-card">
+                    <img src="ca.png" alt="Chartered Accountant" style="width: 284px; height: 177px;">
+                    <h3>Chartered Accountant</h3>
+                    <p>All CA Notes Pdf and Chapters...</p>
+                    <a href="#">Download</a>
+                    <a href="#" class="like-button" style="background-color: white;" onclick="addToFavorites('CA Foundation', 'Important Notes for Chartered Accountant Foundation all Chapters', 'ca.png')">❤️</a>
+                </div>
+                <div class="category-card">
+                    <img src="eco.jpg" alt="Economics" style="width: 284px; height: 177px;">
+                    <h3>Economics</h3>
+                    <p>Important notes for Economics.</p>
+                    <a href="#">Download</a>
+                    <a href="#" class="like-button" style="background-color: white;" onclick="addToFavorites('Economics', 'Important Notes for Economics all Chapters', 'eco.jpg')">❤️</a>
+                </div>
+                <div class="category-card">
+                    <img src="bs.jpg" alt="Business Studies" style="width: 284px; height: 177px;">
+                    <h3>Business Studies</h3>
+                    <p>Important notes for Business Studies</p>
+                    <a href="#">Download</a>
+                    <a href="#" class="like-button" style="background-color: white;" onclick="addToFavorites('Business Studies', 'Important Notes for Business Studies all Chapters', 'bs.jpg')">❤️</a>
+                </div>
+                <div class="category-card">
+                    <img src="imp.png" alt="Important Notes" style="width: 284px; height: 177px;">
+                    <h3>Important Notes</h3>
+                    <p>Important notes for All Subjects</p>
+                    <a href="#">Download</a>
+                    <a href="#" class="like-button" style="background-color: white;" onclick="addToFavorites('IMP Notes', 'Accountancy, Business Studies, Economics, Statistics...', 'imp.png')">❤️</a>
+                </div>
+                <div class="category-card">
+                    <img src="mp.jpg" alt="Modal Question Papers" style="width: 284px; height: 177px;">
+                    <h3>Modal Question Papers</h3>
+                    <p>Modal and Previous Year Question Papers of all Subjects</p>
+                    <a href="#">Download</a>
+                    <a href="#" class="like-button" style="background-color: white;" onclick="addToFavorites('Modal Question Papers', 'Accountancy, Business Studies, Economics, Statistics...', 'mp.jpg')">❤️</a>
+                </div>
+                <div class="category-card">
+                    <img src="kannada.jpg" alt="Kannada" style="width: 284px; height: 177px;">
+                    <h3>Kannada</h3>
+                    <p>All Kannada notes and Pdf...</p>
+                    <a href="#">Download</a>
+                    <a href="#" class="like-button" style="background-color: white;" onclick="addToFavorites('Kannada', 'All Kannada notes and Pdf...', 'kannada.jpg')">❤️</a>
+                </div>
+                <div class="category-card">
+                    <img src="english.png" alt="English" style="width: 284px; height: 177px;">
+                    <h3>English</h3>
+                    <p>All English Notes, pdf and question papers ...</p>
+                    <a href="#">Download</a>
+                    <a href="#" class="like-button" style="background-color: white;" onclick="addToFavorites('English', 'All English Notes, pdf and question papers ...', 'english.png')">❤️</a>
+                </div>
+                <div class="category-card">
+                    <img src="hindi.jpg" alt="Hindi" style="width: 284px; height: 177px;">
+                    <h3>Hindi</h3>
+                    <p>All Hindi notes, pdf and question papers...</p>
+                    <a href="#">Download</a>
+                    <a href="#" class="like-button" style="background-color: white;" onclick="addToFavorites('Hindi', 'All Hindi notes, pdf and question papers...', 'hindi.jpg')">❤️</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Notes World. All rights reserved.</p>
+            <nav>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="123.html">LogOut</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+    <div id="browseModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Browse Notes</h2>
+            <div class="notes-list">
+                <ul>
+                    <li><a href="page.html">Science</a></li>
+                    <li><a href="arts.html">Arts</a></li>
+                    <li><a href="commerce.html">Commerce</a></li>
+                    <li><a href="comp.html">Competitive Exams</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var modal = document.getElementById("browseModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("browseNotesBtn");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal 
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    function addToFavorites(name, description, image) {
+        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        const favoriteItem = { name, description, image };
+
+        if (!favorites.some(item => item.name === name)) {
+            favorites.push(favoriteItem);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            alert(name + " has been added to favorites!");
+        } else {
+            alert(name + " is already in favorites!");
+        }
+    }
+
+    function searchCategories() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase();
+        const categoryCards = document.querySelectorAll('.category-card');
+
+        categoryCards.forEach(card => {
+            const title = card.querySelector('h3').textContent.toLowerCase();
+            if (title.includes(filter)) {
+                card.style.display = ""; // Show the card
+            } else {
+                card.style.display = "none"; // Hide the card
+            }
+        });
+    }
+</script>
+</html>

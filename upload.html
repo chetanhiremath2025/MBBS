@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Digital Library</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #db6934;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #file-upload-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        #file-list {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        #file-list li {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #file-list li:last-child {
+            border-bottom: none;
+        }
+
+        #file-list li span {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+
+        #file-list li button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 5px rgba(131, 221, 13, 0.1);
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo a {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #555;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #007bff;
+        }
+
+        .auth-buttons a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-left: 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .login-btn {
+            border: 1px solid #007bff;
+            color: #091bc2;
+        }
+
+        .login-btn:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .signup-btn {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .signup-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="index2.html"><h1>NOTES WORLD</h1></a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index2.html">Home</a></li>
+                    <li><a href="browse.html">Browse Notes</a></li>
+                    <li><a href="upload.html">Upload Notes</a></li>
+                    <li><a href="favorites.html">Favourites</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons">
+                <a href="profile.html" class="login-btn">Profile</a>
+            </div>
+        </div>
+    </header>
+    <main class="main-content">
+        <section id="file-upload-section">
+            <h2>Upload Files</h2>
+            <input type="file" id="file-input" multiple>
+            <button id="upload-button">Upload</button>
+        </section>
+
+        <section id="file-list-section">
+            <h2>My Files</h2>
+            <ul id="file-list"></ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Notes Library</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const fileInput = document.getElementById('file-input');
+            const uploadButton = document.getElementById('upload-button');
+            const fileList = document.getElementById('file-list');
+
+            
+            const existingFiles = JSON.parse(localStorage.getItem('uploadedFiles')) || [];
+            existingFiles.forEach(fileName => {
+                addFileToList(fileName);
+            });
+
+            uploadButton.addEventListener('click', () => {
+                const files = fileInput.files;
+                if (files.length > 0) {
+                    for (const file of files) {
+                        addFileToList(file.name);
+                        existingFiles.push(file.name);
+                    }
+                    
+                    localStorage.setItem('uploadedFiles', JSON.stringify(existingFiles));
+                    fileInput.value = ''; 
+                }
+            });
+
+            fileList.addEventListener('click', (event) => {
+                if (event.target.classList.contains('delete-button')) {
+                    const fileName = event.target.parentElement.firstChild.textContent;
+                    const index = existingFiles.indexOf(fileName);
+                    if (index > -1) {
+                        existingFiles.splice(index, 1); 
+                        localStorage.setItem('uploadedFiles', JSON.stringify(existingFiles)); 
+                    }
+                    event.target.parentElement.remove();
+                }
+            });
+
+            function addFileToList(fileName) {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <span>${fileName}</span>
+                    <button class="delete-button">Delete</button>
+                `;
+                fileList.appendChild(listItem);
+            }
+        });
+    </script>
+</body>
+</html>

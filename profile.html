@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes Marketplace - Profile</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #333;
+        }
+
+        .profile-container {
+            width: 80%;
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .profile-details div {
+            width: 48%;
+        }
+
+        . profile-details label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .profile-details input,
+        .profile-details select,
+        .profile-details textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .profile-details input:focus,
+        .profile-details select:focus,
+        .profile-details textarea:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .profile-actions {
+            text-align: center;
+        }
+
+        .profile-actions button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .profile-actions button:hover {
+            background-color: #0056b3;
+        }
+
+        .profile-notes {
+            margin-top: 20px;
+        }
+
+        .profile-notes ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .profile-notes li {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        h3 {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <h2>Your Profile</h2>
+        </div>
+
+        <div class="profile-details">
+            <div>
+                <label for="name" id="usernameDisplay">Username:</label>
+                <br>
+
+                <label for="email" id="emailDisplay">Email:</label>
+                <br>
+
+                <label for="phone">Phone:</label>
+                <input type="tel" id="phone" value="124423522">
+
+                <label for="address">Address:</label>
+                <textarea id="address">123 Main St, City</textarea>
+            </div>
+
+            <div>
+                <label for="role">Role:</label>
+                <select id="role">
+                    <option value="buyer">Student</option>
+                    <option value="seller">Teacher</option>
+                </select>
+
+                <label for="bio">Bio:</label>
+                <textarea id="bio">A short bio about yourself.</textarea>
+            </div>
+        </div>
+
+        <div class="profile-actions">
+            <button id="save-profile">Save Profile</button>
+            <button id="logout" >Logout</button>
+        </div>
+
+        <div class="profile-notes">
+            <h3>Your Notes</h3>
+            <ul id="notes-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('save-profile').addEventListener('click', function() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+           
+            if (!name || !email) {
+                alert('Name and email are required.');
+                return;
+            }
+
+            localStorage.setItem('username', name);
+            localStorage.setItem('email', email);
+            localStorage.setItem('phone', phone);
+           
+
+            alert('Profile saved!');
+        });
+
+        document.getElementById('logout').addEventListener('click', function() {
+            localStorage.clear();
+            alert('You have been logged out.');
+            window.location.href = '123.html'; 
+        });
+
+        const username = localStorage.getItem('username');
+        const email = localStorage.getItem('email');
+        const bio = localStorage.getItem('bio') || "This user has not set a bio.";
+        const role = localStorage.getItem('role') || "User  ";
+
+        document.getElementById('usernameDisplay').textContent = `Username: ${username}`;
+        document.getElementById('emailDisplay').textContent = `Email: ${email}`;
+        document.getElementById('bioDisplay').textContent = `Bio: ${bio}`;
+        document.getElementById('roleDisplay').textContent = `Role: ${role}`;
+
+        
+        const uploadedFiles = JSON.parse(localStorage.getItem(' uploadedFiles')) || [];
+        const notesList = document.getElementById('notes-list');
+
+        uploadedFiles.forEach(fileName => {
+            const listItem = document.createElement('li');
+            listItem.textContent = fileName;
+            notesList.appendChild(listItem);
+        });
+    </script>
+
+</body>
+</html>
